@@ -1,7 +1,8 @@
 import React from "react";
+import Game from "./components/Game";
 
 const App: React.FC = () => {
-  return <div className="App">App init</div>;
+  return <Game />;
 };
 
 export default App;
