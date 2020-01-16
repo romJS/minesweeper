@@ -39,7 +39,7 @@ export const getRandomNumber = () => {
 
 /**
  * Randomly plants mines to the board
- * @param board board
+ * @param board
  */
 const plantMines = (board: Cell[][]) => {
   let plantMines = 0;
@@ -58,11 +58,11 @@ const plantMines = (board: Cell[][]) => {
 
 /**
  * Sets number of mines each neighbor cell where is mine planted
- * @param board board
+ * @param board
  */
-const setNumberOfMines = (board: Cell[][]) => {
-  board.forEach((row, rowIndex) => {
-    row.forEach((col, colIndex) => {
+const setNumberOfMines = (board: Cell[][]) =>
+  board.map(row =>
+    row.map(col => {
       if (!col.isMine) {
         let mine = 0;
         const area = checkNearestNeighbor(col.x, col.y, board);
@@ -76,64 +76,63 @@ const setNumberOfMines = (board: Cell[][]) => {
         }
         col.neighbor = mine;
       }
-    });
-  });
-  return board;
-};
+      return col;
+    })
+  );
 
 /**
  * Check all neighbor positions of targeted cell and adds to an array
- * @param x axixX
+ * @param x axisX
  * @param y axisY
- * @param board board
+ * @param board
  */
 const checkNearestNeighbor = (x: number, y: number, board: Cell[][]) => {
   let mines: Array<Cell> = [];
   /// check right neighbor cell
   if (x < PLAYGROUND_SIZE - 1) {
-    mines.push(board[x + 1][y]);
+    mines = [...mines, { ...board[x + 1][y] }];
   }
   /// check left neighbor cell
   if (x > 0) {
-    mines.push(board[x - 1][y]);
+    mines = [...mines, { ...board[x - 1][y] }];
   }
   /// check up neighbor cell
   if (y > 0) {
-    mines.push(board[x][y - 1]);
+    mines = [...mines, { ...board[x][y - 1] }];
   }
   /// check down neighbor cell
   if (y < PLAYGROUND_SIZE - 1) {
-    mines.push(board[x][y + 1]);
+    mines = [...mines, { ...board[x][y + 1] }];
   }
   /// check top right neighbor cell
   if (x < PLAYGROUND_SIZE - 1 && y > 0) {
-    mines.push(board[x + 1][y - 1]);
+    mines = [...mines, { ...board[x + 1][y - 1] }];
   }
   /// check top left neighbor cell
   if (x > 0 && y > 0) {
-    mines.push(board[x - 1][y - 1]);
+    mines = [...mines, { ...board[x - 1][y - 1] }];
   }
   /// check down right neighbor cell
   if (x < PLAYGROUND_SIZE - 1 && y < PLAYGROUND_SIZE - 1) {
-    mines.push(board[x + 1][y + 1]);
+    mines = [...mines, { ...board[x + 1][y + 1] }];
   }
   /// check down left neighbor cell
   if (x > 0 && y < PLAYGROUND_SIZE - 1) {
-    mines.push(board[x - 1][y + 1]);
+    mines = [...mines, { ...board[x - 1][y + 1] }];
   }
   return mines;
 };
 
 /**
  * Reveals whole board when game is over
- * @param board board
+ * @param board
  */
 export const revealBoard = (board: Cell[][]) =>
   board.map(row => row.map(col => ({ ...col, isRevealed: true })));
 
 /**
  * Recursively reveals empty cells
- * @param board board
+ * @param board
  * @param x axisX
  * @param y axisY
  */
@@ -155,33 +154,33 @@ export const revealEmptyCells = (board: Cell[][], x: number, y: number) => {
 };
 
 /**
- * @param board board
+ * @param board
  * @returns number of flagged cells
  */
 export const countFlaggedCells = (board: Cell[][]) => {
-  const count: Cell[] = [];
+  let count = 0;
   board.forEach(row => {
     row.forEach(col => {
       if (col.isFlagged) {
-        count.push(col);
+        count++;
       }
     });
   });
-  return count.length;
+  return count;
 };
 
 /**
- * @param board board
+ * @param board
  * @returns number of revealed cells
  */
 export const countRevealedCells = (board: Cell[][]) => {
-  const count: Cell[] = [];
+  let count = 0;
   board.forEach(row => {
     row.forEach(col => {
       if (col.isRevealed) {
-        count.push(col);
+        count++;
       }
     });
   });
-  return count.length;
+  return count;
 };

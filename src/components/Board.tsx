@@ -40,6 +40,10 @@ class Board extends React.Component {
     document.addEventListener("contextmenu", () => this.contextMenu);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("contextmenu", () => this.contextMenu);
+  }
+
   handleClick = (cell: CellType) => {
     if (this.state.gameOver) return;
     let { isMine, isEmpty, isRevealed, x, y } = cell;
